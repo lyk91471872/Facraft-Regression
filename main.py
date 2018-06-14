@@ -1,9 +1,9 @@
 import numpy as np
 import sqlite3 as sql
-from random_dark_colors import random_dark_colors as rdc
 from matplotlib import pyplot as plt
 from sklearn.svm import SVR
 from fetch_data import fetch_data as fd
+from random_dark_colors import random_dark_colors as rdc
 
 kernel = input('Which kernel to use, polynomial or linear ([p]/l)?    ')
 if len(kernel)>0 and kernel[0]=='l':
@@ -43,4 +43,32 @@ else:
     plt.title('Support Vector Polynomial Regression for Facraft')
 plt.legend()
 
+plt.show()
+
+# draw residual plot
+p = svr.fit(fps, score).predict(fps)
+res = score - p
+plt.plot([15, 45], [0, 0], linestyle='--', color='black', lw=1)
+plt.scatter(fps, res)
+plt.xlim(15, 45)
+
+# draw labels
+if kernel=='linear':
+    plt.title('Residual Plot for Linear Regression')
+else:
+    plt.title('Residual Plot for Polynomial Regression')
+plt.xlabel('fps')
+plt.ylabel('residual ( $score - \widehat{score}$ )')
+plt.show()
+
+# draw residual hiostogram
+plt.hist(res)
+
+# draw labels
+if kernel=='linear':
+    plt.title('Histogram of Residuals for Linear Regression')
+else:
+    plt.title('Histogram of Residuals for Polynomial Regression')
+plt.xlabel('Residuals')
+plt.ylabel('Frequency')
 plt.show()
